@@ -8,6 +8,7 @@
 from StepperMotorDriver import MotorControl
 import mosquitto
 from uuid import getnode as get_mac
+import sys
 
 
 
@@ -76,5 +77,12 @@ class MQTTMotorControl(mosquitto.Mosquitto,MotorControl):
 
 if __name__ == "__main__":
 
-	m = MQTTMotorControl()
+
+	if len(argv) == 2:
+		ip = argv[1]
+	else
+		ip = "localhost"
+		
+	m = MQTTMotorControl(ip = ip)
+
 
