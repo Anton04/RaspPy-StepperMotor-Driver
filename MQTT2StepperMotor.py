@@ -58,15 +58,19 @@ class MQTTMotorControl(mosquitto.Mosquitto,MotorControl):
     		
     		topics = msg.topic.split("/")
     		
-    		if len(topics[-1]) == 0:
-    			topics = topics[:-1]
+    		try:
     		
-    		if topics[-1] == "speed"
-    			self.speed = int(msg.payload)
-    		elif topics[-1] == "step"
-    			self.stepN(int(msg.payload))
-    		elif topics[-1] == "moveto"
-    			self.MoveTo(int(msg.payload))
+	    		if len(topics[-1]) == 0:
+	    			topics = topics[:-1]
+	    		
+	    		if topics[-1] == "speed"
+	    			self.speed = int(msg.payload)
+	    		elif topics[-1] == "step"
+	    			self.stepN(int(msg.payload))
+	    		elif topics[-1] == "moveto"
+	    			self.MoveTo(int(msg.payload))
+	    			
+	    	except Exception,e: print str(e)
     		
     		return
 
