@@ -1,7 +1,8 @@
+#!/usr/bin/python
+
 # Author: Anton Gustafsson
 # Released under MIT license 
 
-#!/usr/bin/python
 
 
 
