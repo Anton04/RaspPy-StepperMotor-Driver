@@ -15,6 +15,8 @@ class MotorControl:
 		self.hasstop = True
 		self.abs_pos = -1
 		
+		self.speed = 100
+		
 	def Setup(self):
 		for pin in self.StepPins:
   			print "Setup pins"
@@ -56,7 +58,10 @@ class MotorControl:
 
 		return self.Counter
 
-	def StepN(self,N,speed):
+	def StepN(self,N,speed=None):
+		
+		if speed == None:
+			speed = self.speed
 
 		move = N
 
@@ -101,7 +106,7 @@ class MotorControl:
 		print "Done!"	
 		
 	#Moves to an abosulte position	
-	def MoveTo(self,pos,speed = 20,auto_recalib = False):
+	def MoveTo(self,pos,speed = None,auto_recalib = False):
 		if self.moves_since_calibration == None:
 			self.Calibrate()
 	
