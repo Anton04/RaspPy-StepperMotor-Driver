@@ -38,18 +38,18 @@ class MQTTMotorControl(mosquitto.Mosquitto,MotorControl):
     		if user != None:
     			self.username_pw_set(user,password)
 
-		self.will_set( topic =  "system/" + self.prefix, payload="Offline", qos=1, retain=True)
+		#self.will_set( topic =  "system/" + self.prefix, payload="Offline", qos=1, retain=True)
 		self.will_set( topic =  self.prefix, payload="Offline", qos=1, retain=True)
-		print "Connecting"
+		print "Connecting to:" +ip
     		self.connect(ip,keepalive=10)
     		self.subscribe(self.prefix + "/#", 0)
     		self.on_connect = self.mqtt_on_connect
     		self.on_message = self.mqtt_on_message
-    		self.publish(topic = "system/"+ self.prefix, payload="Online", qos=1, retain=True)
+    		#self.publish(topic = "system/"+ self.prefix, payload="Online", qos=1, retain=True)
     		self.publish(topic = self.prefix, payload="Online", qos=1, retain=True)
     
     
-    		self.loop_start()
+    		#mosquitto.Mosquitto.loop_start(self)
     
 	def mqtt_on_connect(self, selfX,mosq, result):
     		print "MQTT connected!"
@@ -70,7 +70,7 @@ class MQTTMotorControl(mosquitto.Mosquitto,MotorControl):
 	    		if cmd == "speed":
 	    			self.speed = int(msg.payload)
 	    		elif cmd == "step":
-	    			self.stepN(int(msg.payload))
+	    			self.StepN(int(msg.payload))
 	    		elif cmd == "moveto":
 	    			self.MoveTo(int(msg.payload))
 	    			
@@ -86,6 +86,8 @@ if __name__ == "__main__":
 	else:
 		ip = "localhost"
 		
-	m = MQTTMotorControl(ip = ip)
+	print ip
 
+	m = MQTTMotorControl(ip = ip)
+	m.loop_forever()
 
