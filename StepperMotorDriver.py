@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import time
 import RPi.GPIO as GPIO
 
@@ -11,6 +13,7 @@ class MotorControl:
 		
 		self.moves_since_calibration = None
 		self.hasstop = True
+		self.abs_pos = -1
 		
 	def Setup(self):
 		for pin in self.StepPins:
@@ -54,6 +57,9 @@ class MotorControl:
 		return self.Counter
 
 	def StepN(self,N,speed):
+
+		move = N
+
 		if (N>0):
 			dir = True
 		else:	
@@ -71,33 +77,42 @@ class MotorControl:
 			time.sleep(1.0/stime)
 		self.Shutdown()
 		
-		self.abs_pos += N
-		moves_since_calibration += 1
+		self.abs_pos += move
+		if self.moves_since_calibration != None:
+			self.moves_since_calibration += 1
 		
 		return
 
 	#This function assumes that you have a stop that makes it impossible for the engine to turn more than to a certain point. 
 	#It then uses it for calibrating to an known absolute position. 
 	def CalibrateAgainstStop(self):
-		self.StepN(-300,5)
+		if self.moves_since_calibration == None:
+			self.StepN(-3000,200)
+		else:
+			self.StepN(-1*(100+self.abs_pos),50)
 		self.abs_pos = 0
 		self.moves_since_calibration = 0
 		
 	def Calibrate(self):
+		print "Calibring"
 		if self.hasstop:
 			self.CalibrateAgainstStop()
 		#TODO implement calibratino against I/O connected sensor 
-			
+		print "Done!"	
 		
 	#Moves to an abosulte position	
-	def MoveTo(self,pos,speed = 20,auto_recalib = False
+	def MoveTo(self,pos,speed = 20,auto_recalib = False):
 		if self.moves_since_calibration == None:
 			self.Calibrate()
 	
 		if auto_recalib and moves_since_calib > 1000:
 			self.Calibrate()
-			
-		self.StepN(pos - self.abs_pos ,speed)
+		
+		delta = pos - self.abs_pos
+
+		print "Current position is: %i  Moving %i steps to %i" %(self.abs_pos,delta,pos)
+	
+		self.StepN(delta,speed)
 	
 		return
 
@@ -107,7 +122,7 @@ if __name__ == "__main__":
 	#m.StepN(100,20)
 	while(1):
 		f=input('Please enter a value:')
-		m.MoveTo(f,20)
+		m.MoveTo(f,100)
 
 
 	
