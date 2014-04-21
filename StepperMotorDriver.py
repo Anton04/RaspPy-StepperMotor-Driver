@@ -9,6 +9,9 @@ class MotorControl:
 		self.Counter = 0
 		self.Setup()
 		
+		self.moves_since_calibration = None
+		self.hasstop = True
+		
 	def Setup(self):
 		for pin in self.StepPins:
   			print "Setup pins"
@@ -67,8 +70,36 @@ class MotorControl:
 
 			time.sleep(1.0/stime)
 		self.Shutdown()
+		
+		self.abs_pos += N
+		moves_since_calibration += 1
+		
 		return
 
+	#This function assumes that you have a stop that makes it impossible for the engine to turn more than to a certain point. 
+	#It then uses it for calibrating to an known absolute position. 
+	def CalibrateAgainstStop(self):
+		self.StepN(-300,5)
+		self.abs_pos = 0
+		self.moves_since_calibration = 0
+		
+	def Calibrate(self):
+		if self.hasstop:
+			self.CalibrateAgainstStop()
+		#TODO implement calibratino against I/O connected sensor 
+			
+		
+	#Moves to an abosulte position	
+	def MoveTo(self,pos,speed = 20,auto_recalib = False
+		if self.moves_since_calibration == None:
+			self.Calibrate()
+	
+		if auto_recalib and moves_since_calib > 1000:
+			self.Calibrate()
+			
+		self.StepN(pos - self.abs_pos ,speed)
+	
+		return
 
 if __name__ == "__main__":
 
@@ -76,7 +107,7 @@ if __name__ == "__main__":
 	#m.StepN(100,20)
 	while(1):
 		f=input('Please enter a value:')
-		m.StepN(f,20)
+		m.MoveTo(f,20)
 
 
 	
