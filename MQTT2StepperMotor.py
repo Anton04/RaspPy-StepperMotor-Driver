@@ -18,7 +18,7 @@ class MQTTMotorControl(mosquitto.Mosquitto,MotorControl):
 	def __init__(self,Pins = [24,25,8,7],ip = "localhost", port = 1883, clientId = "MQTT2StepperMotor", user = "driver", password = "1234", prefix = "StepperMotor"):
 		mosquitto.Mosquitto.__init__(self,clientId)
 		
-		MotorControl.__init__(self,Pins):
+		MotorControl.__init__(self,Pins)
     
     		#Get mac adress. 
     		mac = get_mac()
@@ -60,16 +60,18 @@ class MQTTMotorControl(mosquitto.Mosquitto,MotorControl):
     		
     		topics = msg.topic.split("/")
     		
-    		try:
-    		
+    		try:    		
+
 	    		if len(topics[-1]) == 0:
 	    			topics = topics[:-1]
+
+			cmd = topics[-1].lower()
 	    		
-	    		if topics[-1] == "speed"
+	    		if cmd == "speed":
 	    			self.speed = int(msg.payload)
-	    		elif topics[-1] == "step"
+	    		elif cmd == "step":
 	    			self.stepN(int(msg.payload))
-	    		elif topics[-1] == "moveto"
+	    		elif cmd == "moveto":
 	    			self.MoveTo(int(msg.payload))
 	    			
 	    	except Exception,e: print str(e)
@@ -79,9 +81,9 @@ class MQTTMotorControl(mosquitto.Mosquitto,MotorControl):
 if __name__ == "__main__":
 
 
-	if len(argv) == 2:
-		ip = argv[1]
-	else
+	if len(sys.argv) == 2:
+		ip = sys.argv[1]
+	else:
 		ip = "localhost"
 		
 	m = MQTTMotorControl(ip = ip)
