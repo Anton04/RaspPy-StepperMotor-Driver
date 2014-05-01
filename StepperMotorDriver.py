@@ -174,7 +174,7 @@ class MotorControl:
 
 		print "Current position is: %i  Moving %i steps to %i" %(self.abs_pos,delta,pos)
 	
-		self.StepN(delta,speed)
+		self.StepN(delta,speed,True)
 	
 		return
 
