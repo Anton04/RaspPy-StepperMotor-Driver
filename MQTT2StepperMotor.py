@@ -89,5 +89,7 @@ if __name__ == "__main__":
 	print ip
 
 	m = MQTTMotorControl(ip = ip)
+	
+	m.slack = 41
 	m.loop_forever()
 
