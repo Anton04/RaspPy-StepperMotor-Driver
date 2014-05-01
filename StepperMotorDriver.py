@@ -32,6 +32,38 @@ class MotorControl:
 	        for pin in self.StepPins:
 	                GPIO.output(pin, False)
 		return
+	
+	def DoubleStep(self,ForwardDirection=True):
+	
+
+		if self.Counter == 0:
+			GPIO.output(self.StepPins[0], ForwardDirection)
+			GPIO.output(self.StepPins[3], not ForwardDirection)
+		elif self.Counter == 2:
+	                GPIO.output(self.StepPins[1], ForwardDirection)
+	                GPIO.output(self.StepPins[0], not ForwardDirection)
+		elif self.Counter == 4:
+	                GPIO.output(self.StepPins[2], ForwardDirection)
+	                GPIO.output(self.StepPins[1], not ForwardDirection)
+		elif self.Counter == 6:
+	                GPIO.output(self.StepPins[3], ForwardDirection)
+	                GPIO.output(self.StepPins[2], not ForwardDirection)
+	                
+	     	if ForwardDirection:
+			self.Counter += 1
+			if not self.slackIndex >= self.slack:
+				self.slackIndex += 1
+		else:
+			self.Counter -= 1
+			if not self.slackIndex <= 0:
+				self.slackIndex -= 1
+
+		if self.Counter > 7:
+			self.Counter = 0
+		elif self.Counter < 0:
+			self.Counter = 7
+			
+		return self.Counter
 
 	def Step(self,ForwardDirection = True):
 		if self.Counter == 0:
@@ -67,7 +99,7 @@ class MotorControl:
 			
 		return self.Counter
 
-	def StepN(self,N,speed=None):
+	def StepN(self,N,speed=None,Double = false):
 		
 		if speed == None:
 			speed = self.speed
@@ -83,7 +115,10 @@ class MotorControl:
 			slack = self.slackIndex
 	
 		for f in range(0,N + slack):
-			self.Step(dir)
+			if Double:
+				self.DoubleStep(dir)
+			else:
+				self.Step(dir)
 
 			stime = 20 * (f+1)
 			
