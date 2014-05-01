@@ -14,8 +14,13 @@ class MotorControl:
 		self.moves_since_calibration = None
 		self.hasstop = True
 		self.abs_pos = -1
+		self.visual_pos = -1
+		
+		self.slack = 41
+		self.slackIndex = self.slack/2
 		
 		self.speed = 100
+		
 		
 	def Setup(self):
 		for pin in self.StepPins:
@@ -48,14 +53,18 @@ class MotorControl:
 
 		if ForwardDirection:
 			self.Counter += 1
+			if not self.slackIndex >= self.slack:
+				self.slackIndex += 1
 		else:
 			self.Counter -= 1
+			if not self.slackIndex <= 0:
+				self.slackIndex -= 1
 
 		if self.Counter > 7:
 			self.Counter = 0
 		elif self.Counter < 0:
 			self.Counter = 7
-
+			
 		return self.Counter
 
 	def StepN(self,N,speed=None):
@@ -80,7 +89,17 @@ class MotorControl:
 				stime = speed
 
 			time.sleep(1.0/stime)
+			
+		#This saves power but destroys the calibration after some movement. 	
 		#self.Shutdown()
+		
+		#Calculate slack from gearbox. 
+	#	self.slackIndex += move
+	#	if self.slackIndex < 0:
+	#		self.slackIndex = 0
+	#	elif self.slackIndex > self.slack:
+	#		self.slackIndex = self.slack
+		
 		
 		self.abs_pos += move
 		if self.moves_since_calibration != None:
@@ -97,6 +116,7 @@ class MotorControl:
 			self.StepN(-1*(100+self.abs_pos),50)
 		self.abs_pos = 0
 		self.moves_since_calibration = 0
+		self.slackIndex = 0
 		
 	def Calibrate(self):
 		print "Calibring"
