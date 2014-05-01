@@ -103,6 +103,9 @@ class MotorControl:
 
 	def StepN(self,N,speed=None,Double = False):
 		
+		if N == 0:
+			return 0
+		
 		if speed == None:
 			speed = self.speed
 
@@ -156,7 +159,7 @@ class MotorControl:
 	#It then uses it for calibrating to an known absolute position. 
 	def CalibrateAgainstStop(self):
 		if self.moves_since_calibration == None:
-			self.StepN(-3000,2000)
+			self.StepN(-3000,1800)
 		else:
 			self.StepN(-1*(100+self.abs_pos),50,True)
 		self.abs_pos = 0
