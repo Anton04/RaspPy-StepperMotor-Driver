@@ -148,7 +148,7 @@ class MotorControl:
 		if self.moves_since_calibration != None:
 			self.moves_since_calibration += 1
 		
-		return
+		return movement
 
 	#This function assumes that you have a stop that makes it impossible for the engine to turn more than to a certain point. 
 	#It then uses it for calibrating to an known absolute position. 
@@ -178,9 +178,12 @@ class MotorControl:
 		
 		delta = pos - self.visual_pos
 
-		print "Current position is: %i  Moving %i steps to %i" %(self.abs_pos,delta,pos)
+		print "  Visual position is: %i  Moving %i steps to %i" %(self.visual_pos,delta,pos)
+		print "Absolute position is: %i  SlackIndex: %i" %(self.abs_pos,self.slackIndex)
 	
-		self.StepN(delta,speed,True)
+		movement = self.StepN(delta,speed,True)
+	
+		print "Actual movement: %i" % movement
 	
 		return
 
