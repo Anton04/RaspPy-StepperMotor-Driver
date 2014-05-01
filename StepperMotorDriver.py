@@ -130,17 +130,20 @@ class MotorControl:
 			slack = self.slackIndex
 	
 		for f in range(0,N + slack):
-			if Double:
-				self.DoubleStep(dir)
-			else:
-				self.Step(dir)
-
+			
 			stime = 20 * (f+1)
 			
 			if stime > speed:
 				stime = speed
 
 			time.sleep(1.0/stime)
+			
+			if Double:
+				self.DoubleStep(dir)
+			else:
+				self.Step(dir)
+
+			
 			
 		#This saves power but destroys the calibration after some movement. 	
 		#self.Shutdown()
