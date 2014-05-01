@@ -37,20 +37,6 @@ class MotorControl:
 	
 	def DoubleStep(self,ForwardDirection=True):
 	
-
-		if self.Counter == 0:
-			GPIO.output(self.StepPins[0], ForwardDirection)
-			GPIO.output(self.StepPins[3], not ForwardDirection)
-		elif self.Counter == 2:
-	                GPIO.output(self.StepPins[1], ForwardDirection)
-	                GPIO.output(self.StepPins[0], not ForwardDirection)
-		elif self.Counter == 4:
-	                GPIO.output(self.StepPins[2], ForwardDirection)
-	                GPIO.output(self.StepPins[1], not ForwardDirection)
-		elif self.Counter == 6:
-	                GPIO.output(self.StepPins[3], ForwardDirection)
-	                GPIO.output(self.StepPins[2], not ForwardDirection)
-	                
 	     	if ForwardDirection:
 			self.Counter += 1
 			if not self.slackIndex >= self.slack:
@@ -64,10 +50,39 @@ class MotorControl:
 			self.Counter = 0
 		elif self.Counter < 0:
 			self.Counter = 7
+	
+		#Transitions		
+		if self.Counter == 0:
+			GPIO.output(self.StepPins[0], ForwardDirection)
+			GPIO.output(self.StepPins[3], not ForwardDirection)
+		elif self.Counter == 2:
+	                GPIO.output(self.StepPins[1], ForwardDirection)
+	                GPIO.output(self.StepPins[0], not ForwardDirection)
+		elif self.Counter == 4:
+	                GPIO.output(self.StepPins[2], ForwardDirection)
+	                GPIO.output(self.StepPins[1], not ForwardDirection)
+		elif self.Counter == 6:
+	                GPIO.output(self.StepPins[3], ForwardDirection)
+	                GPIO.output(self.StepPins[2], not ForwardDirection)
 			
 		return self.Counter
 
 	def Step(self,ForwardDirection = True):
+
+		if ForwardDirection:
+			self.Counter += 1
+			if not self.slackIndex >= self.slack:
+				self.slackIndex += 1
+		else:
+			self.Counter -= 1
+			if not self.slackIndex <= 0:
+				self.slackIndex -= 1
+
+		if self.Counter > 7:
+			self.Counter = 0
+		elif self.Counter < 0:
+			self.Counter = 7
+
 		if self.Counter == 0:
 			GPIO.output(self.StepPins[0], ForwardDirection)
 		elif self.Counter == 1:
@@ -85,20 +100,6 @@ class MotorControl:
 	        elif self.Counter == 7:
 	                GPIO.output(self.StepPins[2], not ForwardDirection)
 
-		if ForwardDirection:
-			self.Counter += 1
-			if not self.slackIndex >= self.slack:
-				self.slackIndex += 1
-		else:
-			self.Counter -= 1
-			if not self.slackIndex <= 0:
-				self.slackIndex -= 1
-
-		if self.Counter > 7:
-			self.Counter = 0
-		elif self.Counter < 0:
-			self.Counter = 7
-			
 		return self.Counter
 
 	def StepN(self,N,speed=None,Double = False):
