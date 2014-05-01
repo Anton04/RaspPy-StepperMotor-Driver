@@ -199,14 +199,14 @@ if __name__ == "__main__":
 	m.slack = 41
 	#m.StepN(100,20)
 	while(1):
-		f=input('Please enter a value:')
+		f=raw_input('Please enter a value:')
 		
 		if str(f) == "Test":
 			for f in range(0,20):
 				m.MoveTo(300,400)
 				m.MoveTo(800,400)
-				
-		m.MoveTo(f,100)
+		else:		
+			m.MoveTo(int(f),100)
 
 
 	
