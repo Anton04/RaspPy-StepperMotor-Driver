@@ -15,7 +15,7 @@ class MotorControl:
 		self.hasstop = True
 		self.abs_pos = -1
 		self.visual_pos = -1
-		self.stop_pos = -30
+		self.stop_pos = -41
 		
 		self.slack = 0
 		self.slackIndex = self.slack/2
