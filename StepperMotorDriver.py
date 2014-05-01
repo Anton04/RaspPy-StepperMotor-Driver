@@ -163,7 +163,7 @@ class MotorControl:
 		else:
 			self.StepN(-1*(100+self.abs_pos),50,True)
 		self.abs_pos = 0
-		self.visual_pos = 0
+		self.visual_pos = -1*self.slack
 		self.moves_since_calibration = 0
 		self.slackIndex = 0
 		
