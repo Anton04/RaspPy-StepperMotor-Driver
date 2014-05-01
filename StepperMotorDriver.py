@@ -21,6 +21,7 @@ class MotorControl:
 		
 		self.speed = 100
 		
+		self.lastdir = True
 		
 	def Setup(self):
 		for pin in self.StepPins:
@@ -38,13 +39,17 @@ class MotorControl:
 	def DoubleStep(self,ForwardDirection=True):
 	
 	     	if ForwardDirection:
-			self.Counter += 1
+			if self.lastdir == ForwardDirection:
+				self.Counter += 1
 			if not self.slackIndex >= self.slack:
 				self.slackIndex += 1
 		else:
-			self.Counter -= 1
+			if self.lastdir == ForwardDirection:
+				self.Counter -= 1
 			if not self.slackIndex <= 0:
 				self.slackIndex -= 1
+				
+		self.lastdir = ForwardDirection
 
 		if self.Counter > 7:
 			self.Counter = 0
@@ -70,13 +75,17 @@ class MotorControl:
 	def Step(self,ForwardDirection = True):
 
 		if ForwardDirection:
-			self.Counter += 1
+			if self.lastdir == ForwardDirection:
+				self.Counter += 1
 			if not self.slackIndex >= self.slack:
 				self.slackIndex += 1
 		else:
-			self.Counter -= 1
+			if self.lastdir == ForwardDirection:
+				self.Counter -= 1
 			if not self.slackIndex <= 0:
 				self.slackIndex -= 1
+				
+		self.lastdir = ForwardDirection
 
 		if self.Counter > 7:
 			self.Counter = 0
