@@ -137,8 +137,14 @@ class MotorControl:
 	#	elif self.slackIndex > self.slack:
 	#		self.slackIndex = self.slack
 		
+		if dir:
+			movement = N + slack
+		else:
+			movement = -1* (N+slack)
+			
+		self.visual_pos = self.abs_pos + move
+		self.abs_pos += movement
 		
-		self.abs_pos += move
 		if self.moves_since_calibration != None:
 			self.moves_since_calibration += 1
 		
@@ -170,7 +176,7 @@ class MotorControl:
 		if auto_recalib and moves_since_calib > 1000:
 			self.Calibrate()
 		
-		delta = pos - self.abs_pos
+		delta = pos - self.visual_pos
 
 		print "Current position is: %i  Moving %i steps to %i" %(self.abs_pos,delta,pos)
 	
