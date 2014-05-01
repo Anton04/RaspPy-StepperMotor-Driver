@@ -16,7 +16,7 @@ class MotorControl:
 		self.abs_pos = -1
 		self.visual_pos = -1
 		
-		self.slack = 41
+		self.slack = 0
 		self.slackIndex = self.slack/2
 		
 		self.speed = 100
@@ -146,6 +146,7 @@ class MotorControl:
 if __name__ == "__main__":
 
 	m = MotorControl()
+	m.slack = 41
 	#m.StepN(100,20)
 	while(1):
 		f=input('Please enter a value:')
