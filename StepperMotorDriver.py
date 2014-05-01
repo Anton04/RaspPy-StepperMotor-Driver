@@ -76,11 +76,13 @@ class MotorControl:
 
 		if (N>0):
 			dir = True
+			slack = self.slack - self.slackIndex
 		else:	
 			dir = False
 			N = N * -1
+			slack = self.slackIndex
 	
-		for f in range(0,N):
+		for f in range(0,N + slack):
 			self.Step(dir)
 
 			stime = 20 * (f+1)
