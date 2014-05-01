@@ -147,7 +147,7 @@ class MotorControl:
 		else:
 			movement = -1* (N+slack)
 			
-		self.visual_pos = self.abs_pos + move
+		self.visual_pos += move
 		self.abs_pos += movement
 		
 		if self.moves_since_calibration != None:
