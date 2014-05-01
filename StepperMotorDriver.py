@@ -99,7 +99,7 @@ class MotorControl:
 			
 		return self.Counter
 
-	def StepN(self,N,speed=None,Double = false):
+	def StepN(self,N,speed=None,Double = False):
 		
 		if speed == None:
 			speed = self.speed
@@ -150,7 +150,7 @@ class MotorControl:
 		if self.moves_since_calibration == None:
 			self.StepN(-3000,200)
 		else:
-			self.StepN(-1*(100+self.abs_pos),50)
+			self.StepN(-1*(100+self.abs_pos),50,True)
 		self.abs_pos = 0
 		self.moves_since_calibration = 0
 		self.slackIndex = 0
