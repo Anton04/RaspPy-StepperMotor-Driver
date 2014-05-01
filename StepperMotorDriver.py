@@ -172,8 +172,8 @@ class MotorControl:
 		
 	#Moves to an abosulte position	
 	def MoveTo(self,pos,speed = None,auto_recalib = False):
-		#if self.moves_since_calibration == None:
-		#	self.Calibrate()
+		if self.moves_since_calibration == None:
+			self.Calibrate()
 	
 		if auto_recalib and moves_since_calib > 1000:
 			self.Calibrate()
