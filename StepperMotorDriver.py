@@ -80,7 +80,7 @@ class MotorControl:
 				stime = speed
 
 			time.sleep(1.0/stime)
-		self.Shutdown()
+		#self.Shutdown()
 		
 		self.abs_pos += move
 		if self.moves_since_calibration != None:
