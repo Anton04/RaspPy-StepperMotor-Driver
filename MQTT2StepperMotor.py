@@ -73,6 +73,8 @@ class MQTTMotorControl(mosquitto.Mosquitto,MotorControl):
 	    			self.StepN(int(msg.payload))
 	    		elif cmd == "moveto":
 	    			self.MoveTo(int(msg.payload))
+	    		elif cmd == "calibrate":
+	    			self.calibrate()
 	    			
 	    	except Exception,e: print str(e)
     		
